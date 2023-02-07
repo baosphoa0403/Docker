@@ -1,0 +1,27 @@
+version: "3.7"
+services: 
+ todo-app:
+    image: node:18-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3000:3000
+    # thư mục lưu trữ code 
+    working_dir: /app
+    # nơi lưu trữ dữ liệu dấu : là copy ném vào app
+    volumes:
+      - ./:/app
+    # định nghĩa cách đăng nhập vào database thôi
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+ mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+volumes:
+  todo-mysql-data:
